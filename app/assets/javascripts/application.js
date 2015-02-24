@@ -15,7 +15,7 @@
 //= require_tree .
 
 $(function() {
-  $("#play").on("click", beat);
+  $("#play").on("click", fourBeats);
   $("#stop").on("click", stopSounds);
   $("#noteA").val(440);
   $("#noteA").on("click", playSound);
@@ -27,9 +27,22 @@ function beat(freqs) {
     arr.push(T("sin", {freq:value, mul:0.5}));
   });
 
-  T("perc", {r:500}, arr).on("ended", function() {
+  T("perc", {r:1000}, arr).on("ended", function() {
     this.pause();
   }).bang().play();
+}
+
+function majorChord(number) {
+  return [number, number*4/6, number*5/6];
+}
+function minorChord(number) {
+  return [number, number*10/15, number*12/15]
+}
+function fourBeats() {
+  var c = majorChord(400);
+  var d = minorChord(333.33);
+  beat(c);
+  setTimeout(function(){beat(d)}, 1000);
 }
 
 function stopSounds() {
