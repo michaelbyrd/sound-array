@@ -35,14 +35,27 @@ function beat(freqs) {
 function majorChord(number) {
   return [number, number*4/6, number*5/6];
 }
+
 function minorChord(number) {
   return [number, number*10/15, number*12/15]
 }
+
 function fourBeats() {
   var c = majorChord(400);
   var d = minorChord(333.33);
+  playMajorChord(400);
+  setTimeout(function(){playMajorChord(333.333)}, 1000);
+  setTimeout(function(){playMajorChord(666.666)}, 2000);
+}
+
+function playMajorChord(number) {
+  var c = majorChord(number);
   beat(c);
-  setTimeout(function(){beat(d)}, 1000);
+}
+
+function playMinorChord(number) {
+  var c = minorChord(number);
+  beat(c);
 }
 
 function stopSounds() {

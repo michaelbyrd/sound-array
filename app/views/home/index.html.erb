@@ -6,4 +6,14 @@
 
 <%= link_to 'A', '#', id: "noteA", :data => { :'freq' => 440 }%>
 
-
+<div class="array-container">
+  <% 12.times do |i| %>
+  <div class="array-row">
+    <ul>
+      <% 12.times do |j| %>
+        <%= check_box_tag "box[#{i}][#{j}]", i %>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+</div>
