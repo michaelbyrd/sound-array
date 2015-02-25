@@ -32,10 +32,13 @@ function beat(freqs) {
   }).bang().play();
 }
 
-function readColumn(number) {
-  var str = ".checkbox-" + number.toString();
-  var boxes = $(str);
-  boxes.prop("checked", "true");
+function readColumn(num) {
+  var checked = $(".checkbox-"+num+":checked");
+  var arr = [];
+  $.each( checked, function(i, v) {
+    arr.push( parseFloat( $(v).val() ) );
+  });
+  return arr;
 }
 
 function majorChord(number) {
