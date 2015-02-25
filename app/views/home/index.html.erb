@@ -1,19 +1,19 @@
 <h1>Check some boxes</h1>
 
-<%= link_to 'play', '#', id: "play" %>
-<%= link_to 'stop', '#', id: "stop" %>
-<%= link_to 'boxes', '#', id: "boxes" %>
-
-
-<%= link_to 'A', '#', id: "noteA", :data => { :'freq' => 440 }%>
+| <%= link_to 'play', '#', id: "play" %> |
+<%= link_to 'stop', '#', id: "stop" %> |
 
 <div class="array-container">
   <% 12.times do |i| %>
   <div class="array-row">
     <ul>
       <% 16.times do |j| %>
-        <input class="checkbox-<%= j %>" type="checkbox" value=<%= i %>  />
+        <input class="checkbox-<%= j %>" type="checkbox" value=<%= i + 65 %>  />
+        <% if j % 4 == 3 %>
+          |
+        <% end  %>
       <% end %>
+      <%= i %>
     </ul>
   </div>
   <% end %>

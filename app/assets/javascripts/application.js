@@ -19,17 +19,6 @@ $(function() {
   $("#stop").on("click", stopSounds);
 });
 
-function beat(freqs) {
-  var arr = [];
-  $.each(freqs, function(index, value) {
-    arr.push(T("sin", {freq:value, mul:0.5}));
-  });
-
-  T("perc", {r:1000}, arr).on("ended", function() {
-    this.pause();
-  }).bang().play();
-}
-
 function readColumn(num) {
   var checked = $(".checkbox-"+num+":checked");
   var arr = [];
@@ -39,22 +28,29 @@ function readColumn(num) {
   return arr;
 }
 
-function playColumn(num) {
-  beat(readColumn(num));
+function superCollider() {
+  sc.midicps([69, 72]);
 }
 
-function superCollider() {
-  sc.midicps([69, 71]);
+function buildArray() {
+  return [readColumn(0), readColumn(1), readColumn(2), readColumn(3),
+          readColumn(4), readColumn(5), readColumn(6), readColumn(7),
+          readColumn(8), readColumn(9), readColumn(10), readColumn(11),
+          readColumn(12), readColumn(13), readColumn(14), readColumn(15)]
 }
 
 function play() {
   timbre.rec(function(output) {
-    var midis = [[69,72], 71, 72, 76, 69, 71, 72, 76].scramble();
+    var midis = buildArray();
+
     var msec  = timbre.timevalue("bpm120 l8");
     var synth = T("OscGen", {env:T("perc", {r:msec, ar:true})});
 
     T("interval", {interval:msec}, function(count) {
       if (count < midis.length) {
+        $.each( midis[count], function (i, v){
+          synth.noteOn( v, 100);
+        })
         synth.noteOn(midis[count], 100);
       } else {
         output.done();
@@ -80,10 +76,4 @@ function play() {
 
 function stopSounds() {
   T.pause();
-}
-
-function playSound(event) {
-  var f = parseFloat($(event.target).val());
-  console.log(f);
-  T("sin", {freq:f, mul:0.5}).play();
 }
