@@ -32,6 +32,12 @@ function beat(freqs) {
   }).bang().play();
 }
 
+function readColumn(number) {
+  var str = ".checkbox-" + number.toString();
+  var boxes = $(str);
+  boxes.prop("checked", "true");
+}
+
 function majorChord(number) {
   return [number, number*4/6, number*5/6];
 }

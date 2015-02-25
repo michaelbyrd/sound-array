@@ -2,16 +2,18 @@
 
 <%= link_to 'play', '#', id: "play" %>
 <%= link_to 'stop', '#', id: "stop" %>
+<%= link_to 'boxes', '#', id: "boxes" %>
 
 
 <%= link_to 'A', '#', id: "noteA", :data => { :'freq' => 440 }%>
 
+<input id="test" type="checkbox" value="440"  />
 <div class="array-container">
   <% 12.times do |i| %>
   <div class="array-row">
     <ul>
       <% 12.times do |j| %>
-        <%= check_box_tag "box[#{i}][#{j}]", i %>
+        <input class="checkbox-<%= j %>" type="checkbox" value=<%= i %>  />
       <% end %>
     </ul>
   </div>
