@@ -43,6 +43,9 @@ function playColumn(num) {
   beat(readColumn(num));
 }
 
+function superCollider() {
+  sc.midicps([69, 71]);
+}
 
 function play() {
   timbre.rec(function(output) {
