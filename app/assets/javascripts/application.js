@@ -17,8 +17,6 @@
 $(function() {
   $("#play").on("click", fourBeats);
   $("#stop").on("click", stopSounds);
-  $("#noteA").val(440);
-  $("#noteA").on("click", playSound);
 });
 
 function beat(freqs) {
@@ -36,9 +34,21 @@ function readColumn(num) {
   var checked = $(".checkbox-"+num+":checked");
   var arr = [];
   $.each( checked, function(i, v) {
-    arr.push( parseFloat( $(v).val() ) );
+    arr.push( parseFloat( $(v).val() ) * 120 );
   });
   return arr;
+}
+
+function playColumn(num) {
+  beat(readColumn(num));
+}
+
+function play() {
+  playColumn(0);
+  setTimeout(function(){playColumn(1)}, 1000);
+  setTimeout(function(){playColumn(2)}, 3000);
+  setTimeout(function(){playColumn(3)}, 4000);
+  setTimeout(function(){playColumn(4)}, 5000);
 }
 
 function majorChord(number) {
