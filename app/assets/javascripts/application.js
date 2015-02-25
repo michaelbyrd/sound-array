@@ -15,7 +15,7 @@
 //= require_tree .
 
 $(function() {
-  $("#play").on("click", fourBeats);
+  $("#play").on("click", play);
   $("#stop").on("click", stopSounds);
 });
 
@@ -34,7 +34,7 @@ function readColumn(num) {
   var checked = $(".checkbox-"+num+":checked");
   var arr = [];
   $.each( checked, function(i, v) {
-    arr.push( parseFloat( $(v).val() ) * 120 );
+    arr.push( parseFloat( $(v).val() ));
   });
   return arr;
 }
@@ -43,39 +43,37 @@ function playColumn(num) {
   beat(readColumn(num));
 }
 
+
 function play() {
-  playColumn(0);
-  setTimeout(function(){playColumn(1)}, 1000);
-  setTimeout(function(){playColumn(2)}, 3000);
-  setTimeout(function(){playColumn(3)}, 4000);
-  setTimeout(function(){playColumn(4)}, 5000);
+  timbre.rec(function(output) {
+    var midis = [[69,72], 71, 72, 76, 69, 71, 72, 76].scramble();
+    var msec  = timbre.timevalue("bpm120 l8");
+    var synth = T("OscGen", {env:T("perc", {r:msec, ar:true})});
+
+    T("interval", {interval:msec}, function(count) {
+      if (count < midis.length) {
+        synth.noteOn(midis[count], 100);
+      } else {
+        output.done();
+      }
+    }).start();
+
+    output.send(synth);
+  }).then(function(result) {
+    var L = T("buffer", {buffer:result, loop:true});
+    var R = T("buffer", {buffer:result, loop:true});
+
+    var num = 400;
+    var duration = L.duration;
+
+    R.pitch = (duration * (num - 1)) / (duration * num);
+
+    T("delay", {time:"bpm120 l16", fb:0.1, cross:true},
+      T("pan", {pos:-0.6}, L), T("pan", {pos:+0.6}, R)
+    ).play();
+  });
 }
 
-function majorChord(number) {
-  return [number, number*4/6, number*5/6];
-}
-
-function minorChord(number) {
-  return [number, number*10/15, number*12/15]
-}
-
-function fourBeats() {
-  var c = majorChord(400);
-  var d = minorChord(333.33);
-  playMajorChord(400);
-  setTimeout(function(){playMajorChord(333.333)}, 1000);
-  setTimeout(function(){playMajorChord(666.666)}, 2000);
-}
-
-function playMajorChord(number) {
-  var c = majorChord(number);
-  beat(c);
-}
-
-function playMinorChord(number) {
-  var c = minorChord(number);
-  beat(c);
-}
 
 function stopSounds() {
   T.pause();
@@ -86,4 +84,3 @@ function playSound(event) {
   console.log(f);
   T("sin", {freq:f, mul:0.5}).play();
 }
-
